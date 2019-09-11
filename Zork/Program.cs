@@ -22,20 +22,15 @@ namespace Zork
                         outputString = "This is an open field west of a white house, with a boarded front door. \nA rubber mat saying 'Welcome to Zork!' lies by the door.";
                         break;
                     case Commands.NORTH:
-                        outputString = "You moved NORTH";
-                        break;
                     case Commands.SOUTH:
-                        outputString = "You moved SOUTH";
-                        break;
                     case Commands.EAST:
-                        outputString = "You moved EAST";
-                        break;
                     case Commands.WEST:
-                        outputString = "You moved WEST";
+                        outputString = $"You moved {command}.";
                         break;
                     case Commands.QUIT:
                         outputString = "Thank you for playing!";
                         break;
+
                     default:
                         Console.WriteLine("Unknown command.");
                         break;
