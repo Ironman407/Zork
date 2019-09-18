@@ -5,13 +5,16 @@ namespace Zork
 
     class Program
     {
+        private static int LocationColumn = 1;
+
         static void Main(string[] args)
         {
             Console.WriteLine("Welcome to Zork!");
-
+            
             Commands command = Commands.UNKNOWN;
             while (command != Commands.QUIT)
             {
+                Console.WriteLine(Rooms[LocationColumn]);
                 Console.Write("> ");
                 command = ToCommand(Console.ReadLine().Trim());
 
@@ -25,7 +28,15 @@ namespace Zork
                     case Commands.SOUTH:
                     case Commands.EAST:
                     case Commands.WEST:
-                        outputString = $"You moved {command}.";
+                        if(Move(command))
+                        {
+                            outputString = $"You moved {command}.";
+                        }
+                        else
+                        {
+                            outputString = "The way is shut!";
+                        }
+                        
                         break;
                     case Commands.QUIT:
                         outputString = "Thank you for playing!";
@@ -41,6 +52,34 @@ namespace Zork
                 Console.WriteLine(outputString);
             }
         }
+
+        private static bool Move(Commands command)
+        {
+            bool isValidMove = false;
+
+            switch (command)
+            {
+                case Commands.NORTH:
+                case Commands.SOUTH:
+                    break;
+                case Commands.EAST when LocationColumn < Rooms.Length - 1:
+                    isValidMove = true;
+                    LocationColumn++;
+                    break;
+                case Commands.WEST when LocationColumn > 0:
+                    isValidMove = true;
+                    LocationColumn--;
+                    break;
+
+                default:
+                    isValidMove = false;
+                    break;
+            }
+
+            return isValidMove;
+        }
+
+        private static string[] Rooms = { "Forest", "West of House", "Behind House", "Clearing", "Canyon View" };
 
         private static Commands ToCommand(string commandString) => (Enum.TryParse<Commands>(commandString, true, out Commands result) ? result : Commands.UNKNOWN);
         
