@@ -11,6 +11,7 @@ namespace Zork
             get
             {
                 return Rooms[Location.Row, Location.Column];
+                
             }
         }
 
@@ -26,14 +27,14 @@ namespace Zork
             while (command != Commands.QUIT)
             {
                 Console.WriteLine(CurrentRoom);
-                Console.Write("> ");
-                command = ToCommand(Console.ReadLine().Trim());
-                if(previousRoom != CurrentRoom)
+                if (previousRoom != CurrentRoom)
                 {
                     Console.WriteLine(CurrentRoom.Description);
                     previousRoom = CurrentRoom;
                 }
 
+                Console.Write("> ");
+                command = ToCommand(Console.ReadLine().Trim());
                 switch (command)
                 {
                     case Commands.LOOK:
@@ -93,7 +94,8 @@ namespace Zork
             return isValidMove;
         }
 
-      private static readonly Room[,] Rooms = {
+      private static readonly Room[,] Rooms = 
+      {
          {new Room("Rocky Trail"), new Room("South of House"), new Room("Canyon View") },
          {new Room("Forest"), new Room("West of House"), new Room("Behind House")}, 
          {new Room("Dense Woods"), new Room("North of House"), new Room("Clearing") }
@@ -104,9 +106,7 @@ namespace Zork
             var roomMap = new Dictionary<string, Room>();
             foreach (Room room in Rooms)
             {
-                roomMap.Add(room.Name, room);
-                
-                
+                roomMap.Add(room.Name, room);  
             }
 
                 roomMap["Rocky Trail"].Description = "You are on a rock-strewn trail.";
