@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace Zork
 {
@@ -21,10 +22,10 @@ namespace Zork
 
         static void Main(string[] args)
         {
-            const string defaultRoomsFilename = "Rooms.txt";
+            const string defaultRoomsFilename = "Rooms.json";
             string roomsFilename = (args.Length > 0 ? args[(int)CommandLineArguments.RoomsFilename] : defaultRoomsFilename);
             Console.WriteLine("Welcome to Zork!");
-            InitializeRoomDescriptions(roomsFilename);
+            InitializeRooms(roomsFilename);
 
             Room previousRoom = null;
             Commands command = Commands.UNKNOWN;
@@ -98,22 +99,9 @@ namespace Zork
             return isValidMove;
         }
 
-      private static readonly Room[,] Rooms = 
-      {
-         {new Room("Rocky Trail"), new Room("South of House"), new Room("Canyon View") },
-         {new Room("Forest"), new Room("West of House"), new Room("Behind House")}, 
-         {new Room("Dense Woods"), new Room("North of House"), new Room("Clearing") }
-      };
+        private static Room[,] Rooms;
 
-        private static readonly Dictionary<string, Room> RoomMap;
-        static Program()
-        {
-            RoomMap = new Dictionary<string, Room>();
-            foreach(Room room in Rooms)
-            {
-                RoomMap[room.Name] = room;
-            }
-        }
+        
 
         private enum CommandLineArguments
         {
@@ -125,20 +113,9 @@ namespace Zork
             Name = 0,
             Description
         }
-        private static void InitializeRoomDescriptions(string roomsFilename)
+        private static void InitializeRooms(string roomsFilename)
         {
-            const string fieldDelimiter = "##";
-            const int expectedFieldCount = 2;
-
-            var roomQuery = from line in File.ReadLines(roomsFilename)
-                            let fields = line.Split(fieldDelimiter)
-                            where fields.Length == expectedFieldCount
-                            select (Name: fields[(int)Fields.Name],
-                            Description: fields[(int)Fields.Description]);
-            foreach(var (Name, Description) in  roomQuery)
-            {
-                RoomMap[Name].Description = Description;
-            }
+            Rooms = JsonConvert.DeserializeObject<Room[,]>(File.ReadAllText(roomsFilename));
             
         }
 
