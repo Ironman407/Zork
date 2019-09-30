@@ -10,7 +10,7 @@ namespace Zork
         [Command("QUIT", new string[] { "QUIT", "Q", "GOODBYE", "BYE" })]
         public static void Quit(Game game, CommandContext commandContext)
         {
-            if(game.ConfimAction("Are you sure you want to quit?"))
+            if(game.ConfirmAction("Are you sure you want to quit?"))
             {
                 game.Quit();
             }

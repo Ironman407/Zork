@@ -34,9 +34,22 @@ namespace Zork
 
         public Game() => CommandManager = new CommandManager();
 
+        public static void Start(string gameFilename)
+        {
+            if(!File.Exists(gameFilename))
+            {
+                throw new FileNotFoundException("Expected file.", gameFilename);
+            }
 
-        private static readonly string ScriptDirectory = "Scripts";
-        private static readonly string ScriptFileExtension = "*.csx";
+            while (Instance == null || Instance.mIsRestarting)
+            {
+                Instance = Load(gameFilename);
+                Instance.LoadCommands();
+                Instance.LoadScripts();
+                Instance.DisplayWelcomeMessage();
+                Instance.Run();
+            }
+        }
 
         public void Run()
         {
@@ -63,14 +76,14 @@ namespace Zork
             }
         }
 
-        public void restart()
+        public void Restart()
         {
             mIsRunning = false;
             mIsRestarting = true;
-            Console.Clear;
+            Console.Clear();
         }
 
-        public void Quit() mIsrunning = false;
+        public void Quit() => mIsRunning = false;
 
 
         public static Game Load(string filename)
@@ -115,5 +128,39 @@ namespace Zork
                 }
             }
         }
+
+        public bool ConfirmAction(string prompt)
+        {
+            Console.Write(prompt);
+
+            while(true)
+            {
+                string response = Console.ReadLine().Trim().ToUpper();
+                if(response == "YES" || response == "Y")
+                {
+                    return true;
+                }
+                else if(response == "NO" || response == "N")
+                {
+                    return false;
+                }
+                else
+                {
+                    Console.Write("Please answer yes or no.> ");
+                }
+            }
+        }
+
+        private void DisplayWelcomeMessage() => Console.WriteLine(WelcomeMessage);
+
+        public static readonly Random Random = new Random();
+        private static readonly string ScriptDirectory = "Scripts";
+        private static readonly string ScriptFileExtension = "*.csx";
+
+        [JsonProperty]
+        private string WelcomeMessage = null;
+
+        private bool mIsRunning;
+        private bool mIsRestarting;
     }
 }
