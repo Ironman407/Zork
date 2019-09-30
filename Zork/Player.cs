@@ -27,6 +27,8 @@ namespace Zork
             }
         }
 
+        public int Moves = 0;
+
         public Player(World world, string startingLocation)
         {
             World = world;
