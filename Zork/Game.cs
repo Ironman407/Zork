@@ -55,7 +55,7 @@ namespace Zork
         {
             mIsRunning = true;
             Room previousRoom = null;
-            while (IsRunning)
+            while (mIsRunning)
             {
                 Console.WriteLine(Player.Location);
                 if (previousRoom != Player.Location)
