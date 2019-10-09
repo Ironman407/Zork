@@ -11,6 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Zork.Common\Zork.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="Scripts\Hello.csx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
